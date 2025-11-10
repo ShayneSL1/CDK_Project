@@ -25,6 +25,6 @@ export class CdkProjectStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'VpcId', {
       value: vpc.vpcId,
       description: 'VPC ID'
-    })
+    }) // This block is to specify to CloudFormation what I want as an output, i.e a VPC
   };
 };
