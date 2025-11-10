@@ -15,7 +15,14 @@ export class CdkProjectStack extends cdk.Stack {
           cidrMask: 24
         },
         {
-          name: 'Private',
+          //EC2 separate private subnet
+          name: 'Server',
+          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+          cidrMask: 24
+        },
+        {
+          //RDS database separate private subnet
+          name: 'Database',
           subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
           cidrMask: 24
         },
