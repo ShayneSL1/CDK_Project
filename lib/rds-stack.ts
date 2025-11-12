@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import { VpcSubnetGroupType } from 'aws-cdk-lib/cx-api';
 
 
 //Create an interface to accept the VPC from our VPC stack
@@ -16,23 +17,20 @@ export class RDSStack extends cdk.Stack {
     super(scope, id, props);
     
     // RDS configuration will go here
+    const MyRDSDatabase = new rds.DatabaseInstance(this, "MyRDSDatabase", {
+      engine: rds.DatabaseInstanceEngine.MYSQL,
+      vpc: props.vpc,
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+        onePerAz: true,
+        availabilityZones: [props.vpc.availabilityZones[0], props.vpc.availabilityZones[1]]
+      },
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
+      allocatedStorage: 20,
+      maxAllocatedStorage: 30,
 
-//     Use your VPC and place it in the isolated subnet
-
-
-
-// Set up MySQL 8.0 as the database engine
-
-
-
-// Use t3.micro for the instance type
-
-
-
-// Configure storage settings
-
-
-
-// Add appropriate tags
+    })
+    cdk.Tags.of(MyRDSDatabase).add('Name','MyRDSDatabase-AZ1')
+    cdk.Tags.of(MyRDSDatabase).add('Name','MyRDSDatabase-AZ2')
   }
 }
